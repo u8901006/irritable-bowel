@@ -1,0 +1,16 @@
+{
+  "name": "irritable-bowel",
+  "version": "1.0.0",
+  "description": "Borderline Personality Disorder Research Daily Report",
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.js",
+    "fetch": "node src/main.js --skip-ai"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.4.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
