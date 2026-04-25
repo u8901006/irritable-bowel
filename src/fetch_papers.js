@@ -174,6 +174,9 @@ export async function fetchPapers(days = 7, maxPapers = 50) {
     } catch (err) {
       console.error(`[WARN] Query ${i + 1} failed: ${err.message}`);
     }
+    if (i < SEARCH_QUERIES.length - 1) {
+      await new Promise(r => setTimeout(r, 1500));
+    }
   }
 
   console.error(`[INFO] Found ${allPmids.size} unique PMIDs total`);
