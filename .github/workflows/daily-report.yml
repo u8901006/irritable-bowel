@@ -48,10 +48,36 @@ jobs:
           fi
           echo "Date: $(cat $GITHUB_OUTPUT | grep target | cut -d= -f2)"
 
-      - name: Run daily report
+      - name: Configure NVIDIA Nemotron backend
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path("src/generate_report.js")
+          s = p.read_text(encoding="utf-8")
+          s = s.replace("https://open.bigmodel.cn/api/coding/paas/v4", "https://integrate.api.nvidia.com/v1")
+          for old, new in [
+              ("GLM-5-Turbo", "nvidia/nemotron-3-super-120b-a12b"),
+              ("glm-5-turbo", "nvidia/nemotron-3-super-120b-a12b"),
+              ("GLM-4.7-Flash", "nvidia/nemotron-3-nano-30b-a3b"),
+              ("glm-4.7-flash", "nvidia/nemotron-3-nano-30b-a3b"),
+              ("GLM-4.7", "nvidia/nemotron-3-nano-30b-a3b"),
+              ("glm-4.7", "nvidia/nemotron-3-nano-30b-a3b"),
+          ]:
+              s = s.replace(old, new)
+          s = re.sub(r"const MAX_TOKENS = [0-9_]+;", "const MAX_TOKENS = 16384;", s)
+          s = re.sub(r"max_tokens:\s*[0-9_]+,", "max_tokens: 16384,", s)
+          s = s.replace("temperature: 0.3", "temperature: 1.0")
+          s = s.replace("top_p: 0.9", "top_p: 0.95")
+          p.write_text(s, encoding="utf-8")
+          PY
+
+      - name: Run daily report with NVIDIA Nemotron
         env:
-          ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
-        run: node src/main.js --date=${{ steps.date.outputs.target }}
+          ZHIPU_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+        run: |
+          test -n "$ZHIPU_API_KEY" || { echo "::error::Missing NVIDIA_API_KEY repository secret"; exit 1; }
+          node src/main.js --date=${{ steps.date.outputs.target }}
 
       - name: Commit and push
         run: |
@@ -64,6 +90,7 @@ jobs:
           git push
 
       - name: Summary
+        if: always()
         run: |
           echo "### 📄 BPD Research Daily Report" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** ${{ steps.date.outputs.target }}" >> $GITHUB_STEP_SUMMARY
