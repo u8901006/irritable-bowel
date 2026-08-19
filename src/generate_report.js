@@ -5,9 +5,9 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
-const API_BASE = process.env.ZHIPU_API_BASE || 'https://open.bigmodel.cn/api/coding/paas/v4';
-const MODELS = ['glm-5-turbo', 'glm-4.7', 'glm-4.7-flash'];
-const MAX_TOKENS = 100000;
+const API_BASE = (process.env.NVIDIA_API_BASE || 'https://integrate.api.nvidia.com/v1').replace(/\/+$/, '');
+const MODEL_CHAIN = ['nvidia/nemotron-3-super-120b-a12b', 'nvidia/nemotron-3-nano-30b-a3b'];
+const MAX_TOKENS = 16384;
 const TIMEOUT_MS = 660000;
 const MAX_RETRIES = 3;
 
@@ -82,7 +82,15 @@ function cleanJsonResponse(text) {
   return null;
 }
 
-async function callZhipuAPI(apiKey, payload) {
+function delay(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function backoffMs(attempt) {
+  return Math.min(15 * attempt, 60) * 1000;
+}
+
+async function callModelAPI(apiKey, model, payload) {
   const resp = await fetch(`${API_BASE}/chat/completions`, {
     method: 'POST',
     headers: {
@@ -93,18 +101,35 @@ async function callZhipuAPI(apiKey, payload) {
     signal: AbortSignal.timeout(TIMEOUT_MS),
   });
 
+  const bodyText = await resp.text().catch(() => '');
+
   if (resp.status === 429) {
-    throw Object.assign(new Error('Rate limited'), { status: 429 });
-  }
-  if (!resp.ok) {
-    const text = await resp.text().catch(() => '');
-    throw Object.assign(new Error(`HTTP ${resp.status}: ${text.slice(0, 200)}`), { status: resp.status });
+    const retryAfter = parseInt(resp.headers.get('retry-after') || '', 10);
+    throw new Error(`RATE_LIMIT:${Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : 60}`);
   }
 
-  const data = await resp.json();
-  const content = data?.choices?.[0]?.message?.content;
-  if (!content) throw new Error('Empty response from API');
-  return content;
+  if (resp.status === 401 || resp.status === 403) {
+    throw new Error(`AUTH_FAILED:${resp.status}:${bodyText.slice(0, 200)}`);
+  }
+
+  if (!resp.ok) {
+    throw new Error(`HTTP_${resp.status}:${bodyText.slice(0, 200)}`);
+  }
+
+  let data;
+  try {
+    data = JSON.parse(bodyText);
+  } catch {
+    throw new Error('INVALID_JSON_RESPONSE');
+  }
+  return data?.choices?.[0]?.message?.content?.trim() || '';
+}
+
+function isNetworkError(e) {
+  return e.name === 'TimeoutError'
+    || e.name === 'AbortError'
+    || e.name === 'TypeError'
+    || /ETIMEDOUT|ENOTFOUND|ECONNRESET|ECONNREFUSED|fetch failed|network/i.test(e.message);
 }
 
 async function analyzePapers(apiKey, papersData) {
@@ -165,48 +190,62 @@ ${papersText}
 每篇 paper 的 tags 請從以下選擇：${TAG_OPTIONS.join('、')}
 記住：回傳純 JSON，不要用 \`\`\`json\`\`\` 包裹。`;
 
-  for (let modelIdx = 0; modelIdx < MODELS.length; modelIdx++) {
-    const model = MODELS[modelIdx];
+  for (const model of MODEL_CHAIN) {
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       try {
         console.error(`[INFO] Trying ${model} (attempt ${attempt + 1}/${MAX_RETRIES})...`);
-        const content = await callZhipuAPI(apiKey, {
+
+        const payload = {
           model,
           messages: [
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: prompt },
           ],
-          temperature: 0.3,
-          top_p: 0.9,
+          temperature: 1.0,
+          top_p: 0.95,
           max_tokens: MAX_TOKENS,
-        });
+          chat_template_kwargs: { enable_thinking: false },
+        };
+
+        const content = await callModelAPI(apiKey, model, payload);
+        if (!content) {
+          console.error(`[WARN] Empty response from ${model} (attempt ${attempt + 1}), retrying...`);
+          await delay(backoffMs(attempt + 1));
+          continue;
+        }
 
         const result = cleanJsonResponse(content);
         if (!result) {
-          console.error(`[WARN] JSON parse failed on attempt ${attempt + 1} for ${model}`);
-          if (attempt < MAX_RETRIES - 1) {
-            await new Promise(r => setTimeout(r, 5000));
-          }
+          console.error(`[WARN] JSON parse failed on attempt ${attempt + 1}/${MAX_RETRIES}, retrying...`);
+          await delay(backoffMs(attempt + 1));
           continue;
         }
 
-        console.error(`[INFO] Analysis complete: ${result.top_picks?.length || 0} top picks, ${result.all_papers?.length || 0} total`);
-        return result;
+        console.error(`[INFO] Analysis complete via ${model}: ${result.top_picks?.length || 0} top picks, ${result.all_papers?.length || 0} total`);
+        return { ...result, _model: model };
       } catch (err) {
-        if (err.status === 429) {
-          const wait = 60000 * (attempt + 1);
-          console.error(`[WARN] Rate limited, waiting ${wait / 1000}s...`);
-          await new Promise(r => setTimeout(r, wait));
+        if (err.message.startsWith('RATE_LIMIT:')) {
+          const base = parseInt(err.message.split(':')[1], 10);
+          const wait = Math.min(base * (attempt + 1), 180);
+          console.error(`[WARN] Rate limited (429), waiting ${wait}s...`);
+          await delay(wait * 1000);
           continue;
         }
-        console.error(`[ERROR] ${model} attempt ${attempt + 1} failed: ${err.message}`);
-        if (attempt < MAX_RETRIES - 1) {
-          await new Promise(r => setTimeout(r, 5000));
+        if (err.message.startsWith('AUTH_FAILED:')) {
+          console.error(`[ERROR] Authentication failed: ${err.message}. Check that the NVIDIA_API_KEY repository secret is valid.`);
+          return null;
         }
+        if (err.message.startsWith('HTTP_4')) {
+          console.error(`[ERROR] ${model}: ${err.message}`);
+          break;
+        }
+        if (isNetworkError(err)) {
+          console.error(`[WARN] Network/timeout error on attempt ${attempt + 1}: ${err.message}`);
+        } else {
+          console.error(`[ERROR] ${model} failed on attempt ${attempt + 1}: ${err.message}`);
+        }
+        await delay(backoffMs(attempt + 1));
       }
-    }
-    if (modelIdx < MODELS.length - 1) {
-      console.error(`[WARN] Model ${model} exhausted, falling back to ${MODELS[modelIdx + 1]}`);
     }
   }
 
@@ -236,7 +275,7 @@ function generateHtml(analysis) {
   const keywords = analysis.keywords || [];
   const topicDist = analysis.topic_distribution || {};
   const totalCount = topPicks.length + allPapers.length;
-  const usedModel = analysis._model || MODELS[0];
+  const usedModel = analysis._model || MODEL_CHAIN[0];
 
   let topPicksHtml = '';
   for (const pick of topPicks) {
@@ -392,7 +431,7 @@ function generateHtml(analysis) {
       <div class="header-meta">
         <span class="badge badge-date">📅 ${dateDisplay}</span>
         <span class="badge badge-count">📊 ${totalCount} 篇文獻</span>
-        <span class="badge badge-source">Powered by PubMed + Zhipu AI</span>
+        <span class="badge badge-source">Powered by PubMed + NVIDIA Nemotron</span>
       </div>
     </div>
   </header>
@@ -449,7 +488,7 @@ export async function generateReport(apiKey, papersData, outputPath) {
       all_papers: [],
       keywords: [],
       topic_distribution: {},
-      _model: MODELS[0],
+      _model: MODEL_CHAIN[0],
     };
   } else {
     analysis = await analyzePapers(apiKey, papersData);
@@ -457,7 +496,6 @@ export async function generateReport(apiKey, papersData, outputPath) {
       console.error('[ERROR] Analysis failed, cannot generate report');
       process.exit(1);
     }
-    analysis._model = MODELS[0];
   }
 
   const html = generateHtml(analysis);
@@ -468,4 +506,4 @@ export async function generateReport(apiKey, papersData, outputPath) {
   return analysis;
 }
 
-export { MODELS };
+export { MODEL_CHAIN };
