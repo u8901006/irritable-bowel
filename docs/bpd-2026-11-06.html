@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BPD Research &middot; 邊緣性人格障礙症研究日報 &middot; 2026年11月6日</title>
+<meta name="description" content="2026年11月6日 邊緣性人格障礙症研究日報，由 AI 自動彙整 PubMed 最新論文"/>
+<style>
+  :root { --bg: #f6f1e8; --surface: #fffaf2; --line: #d8c5ab; --text: #2b2118; --muted: #766453; --accent: #8c4f2b; --accent-soft: #ead2bf; --card-bg: color-mix(in srgb, var(--surface) 92%, white); }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: radial-gradient(circle at top, #fff6ea 0, var(--bg) 55%, #ead8c6 100%); color: var(--text); font-family: "Noto Sans TC", "PingFang TC", "Helvetica Neue", Arial, sans-serif; min-height: 100vh; overflow-x: hidden; }
+  .container { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
+  header { display: flex; align-items: center; gap: 16px; margin-bottom: 52px; animation: fadeDown 0.6s ease both; }
+  .logo { width: 48px; height: 48px; border-radius: 14px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(140,79,43,0.25); }
+  .header-text h1 { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .header-meta { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; align-items: center; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; letter-spacing: 0.3px; }
+  .badge-date { background: var(--accent-soft); border: 1px solid var(--line); color: var(--accent); }
+  .badge-count { background: rgba(140,79,43,0.06); border: 1px solid var(--line); color: var(--muted); }
+  .badge-source { background: transparent; color: var(--muted); font-size: 11px; padding: 0 4px; }
+  .summary-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 20px 60px rgba(61,36,15,0.06); animation: fadeUp 0.5s ease 0.1s both; }
+  .summary-card h2 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.6px; color: var(--accent); margin-bottom: 16px; }
+  .summary-text { font-size: 15px; line-height: 1.8; color: var(--text); }
+  .section { margin-bottom: 36px; animation: fadeUp 0.5s ease both; }
+  .section-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .section-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--accent-soft); }
+  .news-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; padding: 22px 26px; margin-bottom: 12px; box-shadow: 0 8px 30px rgba(61,36,15,0.04); transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+  .news-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(61,36,15,0.08); }
+  .news-card.featured { border-left: 3px solid var(--accent); }
+  .news-card.featured:hover { border-color: var(--accent); }
+  .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .rank-badge { background: var(--accent); color: #fff7f0; font-weight: 700; font-size: 12px; padding: 2px 8px; border-radius: 6px; }
+  .emoji-icon { font-size: 18px; }
+  .card-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .emoji-sm { font-size: 14px; }
+  .news-card h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.5; }
+  .journal-source { font-size: 12px; color: var(--accent); margin-bottom: 8px; opacity: 0.8; }
+  .news-card p { font-size: 13.5px; line-height: 1.75; color: var(--muted); }
+  .card-footer { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .tag { padding: 2px 9px; background: var(--accent-soft); border-radius: 999px; font-size: 11px; color: var(--accent); }
+  .news-card a { font-size: 12px; color: var(--accent); text-decoration: none; opacity: 0.7; margin-left: auto; }
+  .news-card a:hover { opacity: 1; }
+  .utility-high { color: #5a7a3a; font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(90,122,58,0.1); border-radius: 4px; }
+  .utility-mid { color: #9f7a2e; font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(159,122,46,0.1); border-radius: 4px; }
+  .utility-low { color: var(--muted); font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(118,100,83,0.08); border-radius: 4px; }
+  .utility-sm { font-size: 10px; }
+  .pico-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; padding: 12px; background: rgba(255,253,249,0.8); border-radius: 14px; border: 1px solid var(--line); }
+  .pico-item { display: flex; gap: 8px; align-items: baseline; }
+  .pico-label { font-size: 10px; font-weight: 700; color: #fff7f0; background: var(--accent); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+  .pico-text { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .keywords-section { margin-bottom: 36px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .keyword { padding: 5px 14px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 20px; font-size: 12px; color: var(--accent); cursor: default; transition: background 0.2s; }
+  .keyword:hover { background: rgba(140,79,43,0.18); }
+  .topic-section { margin-bottom: 36px; }
+  .topic-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .topic-name { font-size: 13px; color: var(--muted); width: 120px; flex-shrink: 0; text-align: right; }
+  .topic-bar-bg { flex: 1; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .topic-bar { height: 100%; background: linear-gradient(90deg, var(--accent), #c47a4a); border-radius: 4px; transition: width 0.6s ease; }
+  .topic-count { font-size: 12px; color: var(--accent); width: 24px; }
+  .links-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 48px; animation: fadeUp 0.5s ease 0.4s both; }
+  .link-card { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; text-decoration: none; color: var(--text); transition: all 0.2s; box-shadow: 0 8px 30px rgba(61,36,15,0.04); }
+  .link-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(61,36,15,0.08); }
+  .link-icon { font-size: 28px; flex-shrink: 0; }
+  .link-info { flex: 1; }
+  .link-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .link-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .link-arrow { font-size: 18px; color: var(--accent); font-weight: 700; }
+  .coffee-card { background: linear-gradient(135deg, #fffaf2 0%, #fff3e0 100%); }
+  footer { margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); display: flex; justify-content: space-between; animation: fadeUp 0.5s ease 0.5s both; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 600px) { .container { padding: 36px 18px 60px; } .summary-card, .news-card { padding: 20px 18px; } .pico-grid { grid-template-columns: 1fr; } footer { flex-direction: column; gap: 6px; text-align: center; } .topic-name { width: 70px; font-size: 11px; } .links-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">🧠</div>
+    <div class="header-text">
+      <h1>BPD Research &middot; 邊緣性人格障礙症研究日報</h1>
+      <div class="header-meta">
+        <span class="badge badge-date">📅 2026年11月6日</span>
+        <span class="badge badge-count">📊 6 篇文獻</span>
+        <span class="badge badge-source">Powered by PubMed + NVIDIA Nemotron</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="summary-card">
+    <h2>📋 今日文獻趨勢</h2>
+    <p class="summary-text">今日檢索到的6篇文獻中，僅2篇為邊緣性人格障礙（BPD）相關研究：一篇探討AI輔助藥物開發的理論框架，另一篇為針對青少年BPD特徵的單次諮商睡眠介入試驗（預印本）；其餘4篇均為早產兒支氣管肺發育不良（BPD）之新生兒醫學研究，需注意縮寫同名混淆。</p>
+  </div>
+
+  <div class="section"><div class="section-title"><span class="section-icon">⭐</span>今日精選 TOP Picks</div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#1</span>
+            <span class="emoji-icon">🧠💤</span>
+            <span class="utility-high">高實用性</span>
+          </div>
+          <h3>青少年邊緣性人格障礙特徵者：單次諮商睡眠介入改善睡眠與臨床症狀之隨機試驗</h3>
+          <p class="journal-source">medRxiv &middot; Improved Sleep and Clinical Outcomes Following a Single-Session Intervention among Adolescents with Borderline Personality Disorder Features</p>
+          <p>單次以睡眠為重點的跨診斷介入，顯著改善具BPD特徵青少年的客觀/主觀睡眠指標與多項BPD症狀，效果維持一個月，展現低門檻早期介入潛力。</p>
+          
+            <div class="pico-grid">
+              <div class="pico-item"><span class="pico-label">P</span><span class="pico-text">13-18歲、具3項以上臨床損害等級BPD特徵且有睡眠困擾之青少年（N=57）</span></div>
+              <div class="pico-item"><span class="pico-label">I</span><span class="pico-text">單次跨診斷睡眠與晝夜節律介入（Transdiagnostic Sleep and Circadian Intervention），配合一個月居家練習</span></div>
+              <div class="pico-item"><span class="pico-label">C</span><span class="pico-text">前後對照設計（基線 vs. 介入後1個月）</span></div>
+              <div class="pico-item"><span class="pico-label">O</span><span class="pico-text">客觀EEG與主觀EMA/問卷睡眠指標顯著改善；多項BPD症狀指標顯著下降，效果維持至一個月追蹤</span></div>
+            </div>
+          <div class="card-footer">
+            <span class="tag">兒少BPD</span><span class="tag">早期介入</span><span class="tag">情緒失調</span><span class="tag">隨機對照試驗</span><span class="tag">睡眠</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42818191/" target="_blank">閱讀原文 &rarr;</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#2</span>
+            <span class="emoji-icon">🤖💊</span>
+            <span class="utility-mid">中實用性</span>
+          </div>
+          <h3>人工智慧輔助邊緣性人格障礙新藥開發：多模標的假設性化合物設計框架</h3>
+          <p class="journal-source">Psychopharmacology Bulletin &middot; Piloting New Medications for Borderline Personality Disorder: The Use of Artificial Intelligence in Psychopharmacological Research</p>
+          <p>提出AI驅動的BPD藥物發現框架，設計假設性多模標的化合物BPD-AI-01，旨在單一分子兼具抗憂鬱、抗自殺、情緒穩定、抗精神病效果，且低鎮靜、低體重增加風險。</p>
+          
+            <div class="pico-grid">
+              <div class="pico-item"><span class="pico-label">P</span><span class="pico-text">邊緣性人格障礙患者（理論模擬對象）</span></div>
+              <div class="pico-item"><span class="pico-label">I</span><span class="pico-text">AI生成的假設性化合物BPD-AI-01（5-HT1A部分激動劑、NMDA調節劑、5-HT2A/D2弱拮抗劑）</span></div>
+              <div class="pico-item"><span class="pico-label">C</span><span class="pico-text">現行多重用藥策略與單一標的藥物</span></div>
+              <div class="pico-item"><span class="pico-label">O</span><span class="pico-text">電腦模擬預測具多重治療效果且副作用較低之受體結合特性；尚未進行實證驗證</span></div>
+            </div>
+          <div class="card-footer">
+            <span class="tag">藥物治療</span><span class="tag">精神藥理學</span><span class="tag">人工智慧</span><span class="tag">自傷與自殺</span><span class="tag">情緒失調</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42979337/" target="_blank">閱讀原文 &rarr;</a>
+          </div>
+        </div></div>
+
+  <div class="section"><div class="section-title"><span class="section-icon">📚</span>其他值得關注的文獻</div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">👶🫁</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>早產兒慢性肺病固醇治療失敗之臨床預測因子與支氣管肺發育不良嚴重度關聯</h3>
+          <p class="journal-source">Respiratory Medicine</p>
+          <p>回顧性隊列研究發現，早期非侵入性呼吸期使用氫化可的松與治療成功相關，但扣除死亡個案後統計顯著性消失；治療失敗預測嚴重BPD。</p>
+          <div class="card-footer">
+            <span class="tag">新生兒醫學</span><span class="tag">支氣管肺發育不良</span><span class="tag">固醇治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42988177/" target="_blank">PubMed &rarr;</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">📋👶</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>胎齡36週後確立性支氣管肺發育不良之證據導向管理綜述</h3>
+          <p class="journal-source">Journal of Perinatology</p>
+          <p>敘述性綜述建議氧飽和度目標90-95%、慢性期呼吸器策略、選擇性藥物治療；利尿劑僅短暫獲益，吸入性固醇/支氣管擴張劑缺乏常規使用證據。</p>
+          <div class="card-footer">
+            <span class="tag">新生兒醫學</span><span class="tag">支氣管肺發育不良</span><span class="tag">系統性回顧</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42977799/" target="_blank">PubMed &rarr;</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🔬🩸</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>新生兒慢性肺病合併肺高壓小鼠模型：缺氧誘導血小板活化與肺部血小板堆積</h3>
+          <p class="journal-source">Pediatric Research</p>
+          <p>缺氧誘導BPD-PH小鼠模型中，血小板持續活化（P-selectin、αIIbβ3上調）並堆積於肺部，提示血小板活化為潛在治療標的。</p>
+          <div class="card-footer">
+            <span class="tag">新生兒醫學</span><span class="tag">支氣管肺發育不良</span><span class="tag">肺高壓</span><span class="tag">基礎研究</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42977794/" target="_blank">PubMed &rarr;</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">⚗️🧪</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>雙吡啶基自組裝單分子層表面金屬錯合物：電化學與XPS界面結構解析</h3>
+          <p class="journal-source">RSC Advances</p>
+          <p>材料科學研究：電子束交聯與金屬插層增強雙吡啶SAMs穩定性，應用於分子電子學與感測器；與精神醫學無關。</p>
+          <div class="card-footer">
+            <span class="tag">材料科學</span><span class="tag">電化學</span><span class="tag">非醫學</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42903332/" target="_blank">PubMed &rarr;</a>
+          </div>
+        </div></div>
+
+  <div class="topic-section section"><div class="section-title"><span class="section-icon">📊</span>主題分佈</div>
+            <div class="topic-row">
+              <span class="topic-name">兒少BPD</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">早期介入</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">情緒失調</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:50%"></div></div>
+              <span class="topic-count">2</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">藥物治療</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">精神藥理學</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">人工智慧</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">自傷與自殺</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">新生兒醫學</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:100%"></div></div>
+              <span class="topic-count">4</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">支氣管肺發育不良</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:100%"></div></div>
+              <span class="topic-count">4</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">非醫學</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div></div>
+
+  <div class="keywords-section section"><div class="section-title"><span class="section-icon">🏷️</span>關鍵字</div><div class="keywords"><span class="keyword">邊緣性人格障礙</span><span class="keyword">青少年</span><span class="keyword">睡眠介入</span><span class="keyword">人工智慧</span><span class="keyword">藥物開發</span><span class="keyword">支氣管肺發育不良</span><span class="keyword">早產兒</span></div></div>
+
+  <div class="links-grid">
+    <a href="https://www.leepsyclinic.com/" class="link-card" target="_blank">
+      <span class="link-icon">🏥</span>
+      <span class="link-info"><span class="link-name">李政洋身心診所首頁</span><span class="link-desc">專業身心科診療服務</span></span>
+      <span class="link-arrow">&rarr;</span>
+    </a>
+    <a href="https://blog.leepsyclinic.com/" class="link-card" target="_blank">
+      <span class="link-icon">📨</span>
+      <span class="link-info"><span class="link-name">訂閱電子報</span><span class="link-desc">接收最新身心健康資訊</span></span>
+      <span class="link-arrow">&rarr;</span>
+    </a>
+    <a href="https://buymeacoffee.com/CYlee" class="link-card coffee-card" target="_blank">
+      <span class="link-icon">☕</span>
+      <span class="link-info"><span class="link-name">Buy Me a Coffee</span><span class="link-desc">支持我們繼續產出優質內容</span></span>
+      <span class="link-arrow">&rarr;</span>
+    </a>
+  </div>
+
+  <footer>
+    <span>資料來源：PubMed &middot; 分析模型：nvidia/nemotron-3-ultra-550b-a55b</span>
+    <span><a href="https://github.com/u8901006/irritable-bowel">GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>
